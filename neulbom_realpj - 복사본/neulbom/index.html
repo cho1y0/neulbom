@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>늘봄 AI - 따뜻한 시니어 케어</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- 토스트 컨테이너 -->
+    <div id="toast-container"></div>
+
+    <!-- ========== 로그인 페이지 ========== -->
+    <div id="login-page" class="page active">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-bomi">
+                    <img src="images/bomi-welcome.png" alt="보미" class="bomi-img">
+                </div>
+                <div class="login-header">
+                    <h1 class="logo-text">늘봄</h1>
+                    <p class="logo-subtitle">언제나 곁에서 함께하는 따뜻한 돌봄</p>
+                </div>
+                <form id="login-form" class="login-form" onsubmit="return handleLogin(event)">
+                    <div class="input-group">
+                        <span class="input-icon material-icons-round">person</span>
+                        <input type="text" id="login-username" placeholder="아이디" required>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-icon material-icons-round">lock</span>
+                        <input type="password" id="login-password" placeholder="비밀번호" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">
+                        <span class="material-icons-round">favorite</span>
+                        로그인
+                    </button>
+                </form>
+                <div class="login-footer">
+                    <button type="button" class="btn-link" onclick="showPage('signup-page')">
+                        아직 회원이 아니신가요? <strong>회원가입</strong>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== 회원가입 페이지 ========== -->
+    <div id="signup-page" class="page">
+        <div class="signup-container">
+            <div class="progress-steps">
+                <div class="step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <span class="step-label">보호자 정보</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <span class="step-label">어르신 등록</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" data-step="3">
+                    <div class="step-circle">3</div>
+                    <span class="step-label">기기 등록</span>
+                </div>
+            </div>
+
+            <!-- Step 1: 보호자 정보 -->
+            <div id="signup-step-1" class="signup-step active">
+                <div class="step-header">
+                    <img src="images/bomi-plant.png" alt="보미" class="step-bomi">
+                    <div>
+                        <h2>보호자 정보 입력</h2>
+                        <p>소중한 가족을 돌보는 보호자님의 정보를 입력해주세요</p>
+                    </div>
+                </div>
+                <form id="step1-form" class="signup-form">
+                    <div class="form-section">
+                        <h3><span class="material-icons-round">account_circle</span> 계정 정보</h3>
+                        <div class="input-wrapper">
+                            <label for="signup-username">아이디 <span class="required">*</span></label>
+                            <div class="input-with-btn">
+                                <input type="text" id="signup-username" placeholder="영문, 숫자 4-20자" data-rule="username">
+                                <button type="button" class="btn btn-sm btn-outline" onclick="checkDuplicate()">중복확인</button>
+                            </div>
+                            <span class="error-text"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="signup-password">비밀번호 <span class="required">*</span></label>
+                            <input type="password" id="signup-password" placeholder="영문, 숫자, 특수문자 포함 8자 이상" data-rule="password">
+                            <span class="error-text"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="signup-password-confirm">비밀번호 확인 <span class="required">*</span></label>
+                            <input type="password" id="signup-password-confirm" placeholder="비밀번호를 다시 입력해주세요">
+                            <span class="error-text"></span>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h3><span class="material-icons-round">badge</span> 개인 정보</h3>
+                        <div class="input-wrapper">
+                            <label for="signup-name">이름 <span class="required">*</span></label>
+                            <input type="text" id="signup-name" placeholder="실명을 입력해주세요" data-rule="name">
+                            <span class="error-text"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="signup-phone">휴대폰 번호 <span class="required">*</span></label>
+                            <input type="tel" id="signup-phone" placeholder="010-0000-0000" data-rule="phone">
+                            <span class="error-text"></span>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h3><span class="material-icons-round">home</span> 주소</h3>
+                        <div class="input-wrapper">
+                            <label for="signup-zipcode">우편번호 <span class="required">*</span></label>
+                            <div class="input-with-btn">
+                                <input type="text" id="signup-zipcode" placeholder="우편번호" readonly>
+                                <button type="button" class="btn btn-sm btn-outline" onclick="searchAddress('signup')">주소검색</button>
+                            </div>
+                            <span class="error-text"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="signup-address">기본주소 <span class="required">*</span></label>
+                            <input type="text" id="signup-address" placeholder="주소검색을 이용해주세요" readonly>
+                            <span class="error-text"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="signup-address-detail">상세주소 <span class="required">*</span></label>
+                            <input type="text" id="signup-address-detail" placeholder="상세주소를 입력해주세요">
+                            <span class="error-text"></span>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h3><span class="material-icons-round">gavel</span> 약관 동의</h3>
+                        <div class="terms-container">
+                            <label class="checkbox-label terms-all">
+                                <input type="checkbox" id="terms-all" onchange="toggleAllTerms(this)">
+                                <span class="checkmark"></span>
+                                <span>전체 동의</span>
+                            </label>
+                            <div class="terms-divider"></div>
+                            <div class="term-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" class="term-check required-term">
+                                    <span class="checkmark"></span>
+                                    <span>[필수] 서비스 이용약관 동의</span>
+                                </label>
+                                <button type="button" class="term-toggle" onclick="toggleTermContent('term-service')">
+                                    <span class="material-icons-round">expand_more</span>
+                                </button>
+                            </div>
+                            <div id="term-service" class="term-content">
+                                <p><strong>제1조 (목적)</strong><br>이 약관은 늘봄 AI 서비스 이용에 관한 기본적인 사항을 규정합니다.</p>
+                            </div>
+                            <div class="term-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" class="term-check required-term">
+                                    <span class="checkmark"></span>
+                                    <span>[필수] 개인정보 수집 및 이용 동의</span>
+                                </label>
+                                <button type="button" class="term-toggle" onclick="toggleTermContent('term-privacy')">
+                                    <span class="material-icons-round">expand_more</span>
+                                </button>
+                            </div>
+                            <div id="term-privacy" class="term-content">
+                                <p><strong>수집항목</strong><br>성명, 연락처, 주소, 로그인 정보</p>
+                            </div>
+                            <div class="term-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" class="term-check required-term">
+                                    <span class="checkmark"></span>
+                                    <span>[필수] 민감정보 처리 동의</span>
+                                </label>
+                                <button type="button" class="term-toggle" onclick="toggleTermContent('term-sensitive')">
+                                    <span class="material-icons-round">expand_more</span>
+                                </button>
+                            </div>
+                            <div id="term-sensitive" class="term-content">
+                                <p><strong>민감정보 항목</strong><br>건강상태, 활동 패턴, 수면 정보</p>
+                            </div>
+                            <div class="term-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" class="term-check">
+                                    <span class="checkmark"></span>
+                                    <span>[선택] 마케팅 정보 수신 동의</span>
+                                </label>
+                                <button type="button" class="term-toggle" onclick="toggleTermContent('term-marketing')">
+                                    <span class="material-icons-round">expand_more</span>
+                                </button>
+                            </div>
+                            <div id="term-marketing" class="term-content">
+                                <p>늘봄 AI의 이벤트, 혜택 정보를 받아보실 수 있습니다.</p>
+                            </div>
+                        </div>
+                        <span class="error-text" id="terms-error"></span>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" class="btn btn-outline" onclick="showPage('login-page')">취소</button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep(1)">다음 단계 <span class="material-icons-round">arrow_forward</span></button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 2: 어르신 정보 -->
+            <div id="signup-step-2" class="signup-step">
+                <div class="step-header">
+                    <img src="images/bomi-good.png" alt="보미" class="step-bomi">
+                    <div>
+                        <h2>어르신 정보 등록</h2>
+                        <p>돌봄 받으실 어르신의 정보를 입력해주세요</p>
+                    </div>
+                </div>
+                <form id="step2-form" class="signup-form">
+                    <div class="form-section">
+                        <h3><span class="material-icons-round">elderly</span> 기본 정보</h3>
+                        <div class="input-wrapper">
+                            <label for="senior-name">성함 <span class="required">*</span></label>
+                            <input type="text" id="senior-name" placeholder="어르신 성함" data-rule="name">
+                            <span class="error-text"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label>생년월일 <span class="required">*</span></label>
+                            <div class="birth-select-group">
+                                <select id="senior-birth-year" class="birth-select"><option value="">년도</option></select>
+                                <select id="senior-birth-month" class="birth-select"><option value="">월</option></select>
+                                <select id="senior-birth-day" class="birth-select"><option value="">일</option></select>
+                            </div>
+                            <span class="error-text" id="senior-birth-error"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label>성별 <span class="required">*</span></label>
+                            <div class="radio-group">
+                                <label class="radio-label"><input type="radio" name="senior-gender" value="male"><span class="radio-mark"></span><span>남성</span></label>
+                                <label class="radio-label"><input type="radio" name="senior-gender" value="female"><span class="radio-mark"></span><span>여성</span></label>
+                            </div>
+                            <span class="error-text" id="senior-gender-error"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="senior-phone">연락처</label>
+                            <input type="tel" id="senior-phone" placeholder="010-0000-0000 (없으면 생략)" data-rule="phone-optional">
+                            <span class="error-text"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="senior-relation">가족관계 <span class="required">*</span></label>
+                            <select id="senior-relation">
+                                <option value="">선택해주세요</option>
+                                <option value="parent">부모님</option>
+                                <option value="grandparent">조부모님</option>
+                                <option value="spouse">배우자</option>
+                                <option value="relative">친척</option>
+                                <option value="other">기타</option>
+                            </select>
+                            <span class="error-text"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label>주거형태 <span class="required">*</span></label>
+                            <div class="radio-group vertical">
+                                <label class="radio-label"><input type="radio" name="senior-living" value="with-family"><span class="radio-mark"></span><span>자녀와 거주</span></label>
+                                <label class="radio-label"><input type="radio" name="senior-living" value="alone"><span class="radio-mark"></span><span>독거</span></label>
+                                <label class="radio-label"><input type="radio" name="senior-living" value="couple"><span class="radio-mark"></span><span>부부 거주</span></label>
+                            </div>
+                            <span class="error-text" id="senior-living-error"></span>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h3><span class="material-icons-round">location_on</span> 거주지 주소</h3>
+                        <div class="input-wrapper">
+                            <label for="senior-zipcode">우편번호 <span class="required">*</span></label>
+                            <div class="input-with-btn">
+                                <input type="text" id="senior-zipcode" placeholder="우편번호" readonly>
+                                <button type="button" class="btn btn-sm btn-outline" onclick="searchAddress('senior')">주소검색</button>
+                            </div>
+                            <span class="error-text"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="senior-address">기본주소 <span class="required">*</span></label>
+                            <input type="text" id="senior-address" placeholder="주소검색을 이용해주세요" readonly>
+                            <span class="error-text"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="senior-address-detail">상세주소 <span class="required">*</span></label>
+                            <input type="text" id="senior-address-detail" placeholder="상세주소를 입력해주세요">
+                            <span class="error-text"></span>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h3><span class="material-icons-round">medical_information</span> 특이사항</h3>
+                        <div class="input-wrapper">
+                            <label for="senior-notes">건강 관련 메모</label>
+                            <textarea id="senior-notes" rows="3" placeholder="복용 중인 약, 주의사항 등"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h3><span class="material-icons-round">verified_user</span> 어르신 정보 이용 동의</h3>
+                        <div class="terms-container">
+                            <label class="checkbox-label terms-all">
+                                <input type="checkbox" id="senior-terms-all" onchange="toggleAllSeniorTerms(this)">
+                                <span class="checkmark"></span>
+                                <span>전체 동의</span>
+                            </label>
+                            <div class="terms-divider"></div>
+                            <div class="term-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" class="senior-term-check required-term">
+                                    <span class="checkmark"></span>
+                                    <span>[필수] 어르신 개인정보 수집 동의</span>
+                                </label>
+                                <button type="button" class="term-toggle" onclick="toggleTermContent('term-senior-privacy')">
+                                    <span class="material-icons-round">expand_more</span>
+                                </button>
+                            </div>
+                            <div id="term-senior-privacy" class="term-content">
+                                <p><strong>수집항목</strong><br>성명, 생년월일, 연락처, 주소</p>
+                            </div>
+                            <div class="term-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" class="senior-term-check required-term">
+                                    <span class="checkmark"></span>
+                                    <span>[필수] 건강 모니터링 동의</span>
+                                </label>
+                                <button type="button" class="term-toggle" onclick="toggleTermContent('term-senior-monitoring')">
+                                    <span class="material-icons-round">expand_more</span>
+                                </button>
+                            </div>
+                            <div id="term-senior-monitoring" class="term-content">
+                                <p><strong>모니터링 항목</strong><br>활동량, 수면 패턴, 환경 정보</p>
+                            </div>
+                            <div class="term-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" class="senior-term-check required-term">
+                                    <span class="checkmark"></span>
+                                    <span>[필수] 법정대리인(보호자) 동의 확인</span>
+                                </label>
+                                <button type="button" class="term-toggle" onclick="toggleTermContent('term-senior-guardian')">
+                                    <span class="material-icons-round">expand_more</span>
+                                </button>
+                            </div>
+                            <div id="term-senior-guardian" class="term-content">
+                                <p>본인은 어르신의 보호자로서 서비스 이용에 동의합니다.</p>
+                            </div>
+                        </div>
+                        <span class="error-text" id="senior-terms-error"></span>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" class="btn btn-outline" onclick="prevStep(2)"><span class="material-icons-round">arrow_back</span> 이전 단계</button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep(2)">다음 단계 <span class="material-icons-round">arrow_forward</span></button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 3: 기기 등록 -->
+            <div id="signup-step-3" class="signup-step">
+                <div class="step-header">
+                    <img src="images/bomi-happy.png" alt="보미" class="step-bomi">
+                    <div>
+                        <h2>IoT 기기 등록</h2>
+                        <p>어르신 댁에 설치할 기기를 등록해주세요</p>
+                    </div>
+                </div>
+                <form id="step3-form" class="signup-form">
+                    <div class="form-section">
+                        <h3><span class="material-icons-round">qr_code_scanner</span> 기기 등록 방식</h3>
+                        <div class="device-method-tabs">
+                            <button type="button" class="method-btn active" onclick="selectDeviceMethod('qr')">
+                                <span class="material-icons-round">qr_code_scanner</span> QR 스캔
+                            </button>
+                            <button type="button" class="method-btn" onclick="selectDeviceMethod('manual')">
+                                <span class="material-icons-round">keyboard</span> 직접 입력
+                            </button>
+                        </div>
+                        <div id="device-qr" class="device-input-section active">
+                            <div class="qr-scanner-placeholder">
+                                <span class="material-icons-round">qr_code_scanner</span>
+                                <p>카메라 권한을 허용하고<br>기기의 QR 코드를 스캔해주세요</p>
+                                <button type="button" class="btn btn-outline" onclick="simulateQRScan()">QR 스캔 시뮬레이션</button>
+                            </div>
+                        </div>
+                        <div id="device-manual" class="device-input-section">
+                            <div class="input-wrapper">
+                                <label for="device-serial">시리얼 번호 <span class="required">*</span></label>
+                                <input type="text" id="device-serial" placeholder="기기 시리얼 번호">
+                                <span class="error-text"></span>
+                            </div>
+                            <div class="input-wrapper">
+                                <label for="device-name">기기 이름</label>
+                                <input type="text" id="device-name" placeholder="예: 거실 환경센서">
+                            </div>
+                            <div class="input-wrapper">
+                                <label for="device-location">설치 위치</label>
+                                <select id="device-location">
+                                    <option value="living">거실</option>
+                                    <option value="bedroom">침실</option>
+                                    <option value="kitchen">주방</option>
+                                    <option value="bathroom">화장실</option>
+                                    <option value="entrance">현관</option>
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-outline btn-full" onclick="addDeviceToList()">
+                                <span class="material-icons-round">add</span> 기기 추가
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h3><span class="material-icons-round">devices</span> 등록된 기기</h3>
+                        <div id="device-list" class="device-list">
+                            <div class="empty-device-list">
+                                <span class="material-icons-round">devices_off</span>
+                                <p>등록된 기기가 없습니다</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" class="btn btn-outline" onclick="prevStep(3)"><span class="material-icons-round">arrow_back</span> 이전</button>
+                        <button type="button" class="btn btn-secondary" onclick="skipDeviceAndComplete()">나중에 등록</button>
+                        <button type="button" class="btn btn-primary" onclick="completeSignup()"><span class="material-icons-round">check</span> 가입 완료</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== 메인 앱 ========== -->
+    <div id="main-app" class="page">
+        <nav class="main-nav">
+            <div class="nav-brand">
+                <img src="images/bomi-welcome.png" alt="보미" class="nav-bomi">
+                <span class="nav-logo-text">늘봄</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item active" data-page="dashboard"><span class="material-icons-round">dashboard</span><span>대시보드</span></li>
+                <li class="nav-item" data-page="report"><span class="material-icons-round">assessment</span><span>리포트</span></li>
+                <li class="nav-item" data-page="healthcheck"><span class="material-icons-round">monitor_heart</span><span>헬스체크</span></li>
+                <li class="nav-item" data-page="mypage"><span class="material-icons-round">person</span><span>마이페이지</span></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="nav-bell" onclick="openNotificationModal()">
+                    <span class="material-icons-round">notifications</span>
+                    <span class="bell-badge" id="nav-bell-badge">2</span>
+                </button>
+                <button class="nav-logout" onclick="handleLogout()"><span class="material-icons-round">logout</span></button>
+            </div>
+        </nav>
+
+        <!-- 대시보드 (새 레이아웃: 상단 감정+인지, 하단 환경) -->
+        <div id="dashboard-view" class="view active">
+            <div class="dashboard-greeting">
+                <div class="greeting-content">
+                    <img src="images/bomi-good.png" alt="보미" class="greeting-bomi">
+                    <div class="greeting-text">
+                        <h1>안녕하세요, <span id="user-name-display">보호자</span>님! 🌸</h1>
+                        <p id="dynamic-greeting"><span id="senior-name-display">어르신</span>의 오늘 하루도 늘봄이 함께합니다</p>
+                    </div>
+                </div>
+                <div class="greeting-date" id="current-date"></div>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card health"><div class="metric-icon"><span class="material-icons-round">favorite</span></div><div class="metric-info"><span class="metric-label">건강 지수</span><span class="metric-value">92<small>점</small></span></div><span class="metric-badge good">양호</span></div>
+                <div class="metric-card activity"><div class="metric-icon"><span class="material-icons-round">directions_walk</span></div><div class="metric-info"><span class="metric-label">오늘 활동량</span><span class="metric-value">3,240<small>걸음</small></span></div><span class="metric-badge normal">정상</span></div>
+                <div class="metric-card sleep"><div class="metric-icon"><span class="material-icons-round">bedtime</span></div><div class="metric-info"><span class="metric-label">수면 시간</span><span class="metric-value">7.5<small>시간</small></span></div><span class="metric-badge good">양호</span></div>
+                <div class="metric-card emotion"><div class="metric-icon"><span class="material-icons-round">sentiment_satisfied</span></div><div class="metric-info"><span class="metric-label">감정 상태</span><span class="metric-value">긍정적</span></div><span class="metric-badge good">좋음</span></div>
+            </div>
+
+            <div class="dashboard-main-grid">
+                <div class="dashboard-top-row">
+                    <div class="card emotion-analysis-card">
+                        <div class="card-header"><h3><span class="material-icons-round">mood</span> 감정 분석</h3><span class="card-badge positive">긍정적</span></div>
+                        <div class="chart-container-md"><canvas id="emotion-bubble-chart"></canvas></div>
+                        <div class="emotion-legend">
+                            <span class="legend-item"><span class="dot positive"></span>긍정</span>
+                            <span class="legend-item"><span class="dot neutral"></span>중립</span>
+                            <span class="legend-item"><span class="dot negative"></span>부정</span>
+                        </div>
+                    </div>
+                    <div class="card cognitive-card">
+                        <div class="card-header"><h3><span class="material-icons-round">psychology</span> 인지 활동</h3><span class="card-badge good">활발</span></div>
+                        <div class="chart-container-md"><canvas id="cognitive-chart"></canvas></div>
+                        <div class="cognitive-summary">
+                            <div class="cog-item"><span class="material-icons-round">chat</span><span>대화 30분</span></div>
+                            <div class="cog-item"><span class="material-icons-round">menu_book</span><span>독서 15분</span></div>
+                            <div class="cog-item"><span class="material-icons-round">tv</span><span>TV 45분</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-bottom-row">
+                    <div class="card environment-wide-card">
+                        <div class="card-header">
+                            <h3><span class="material-icons-round">thermostat</span> 실내 환경</h3>
+                            <div class="env-current-values">
+                                <span class="env-value temp"><span class="material-icons-round">device_thermostat</span> 24.5°C</span>
+                                <span class="env-value humidity"><span class="material-icons-round">water_drop</span> 45%</span>
+                                <span class="env-value air"><span class="material-icons-round">air</span> 좋음</span>
+                            </div>
+                        </div>
+                        <div class="chart-container-wide"><canvas id="env-chart"></canvas></div>
+                    </div>
+                </div>
+                <div class="dashboard-side">
+                    <div class="card notification-card compact">
+                        <div class="card-header"><h3><span class="material-icons-round">notifications_active</span> 최근 알림</h3><button class="link-btn" onclick="openNotificationModal()">전체</button></div>
+                        <div class="notification-list compact" id="notification-list"></div>
+                    </div>
+                    <div class="card device-card compact">
+                        <div class="card-header"><h3><span class="material-icons-round">sensors</span> 기기 상태</h3><button class="icon-btn sm" onclick="openAddDeviceModal()"><span class="material-icons-round">add</span></button></div>
+                        <div class="device-status-list compact" id="device-status-list"></div>
+                    </div>
+                    <div class="card ai-card compact">
+                        <div class="card-header"><h3><span class="material-icons-round">auto_awesome</span> AI 추천</h3></div>
+                        <div class="ai-recommendations compact">
+                            <div class="ai-chip"><span class="material-icons-round">wb_sunny</span> 오후 산책 권장</div>
+                            <div class="ai-chip"><span class="material-icons-round">local_drink</span> 수분 섭취 알림</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 리포트 뷰 -->
+        <div id="report-view" class="view">
+            <div class="view-header"><h2>상세 리포트</h2><p>어르신의 건강 데이터를 한눈에 확인하세요</p></div>
+            <div class="report-period-selector">
+                <button class="period-btn active" onclick="changeReportPeriod('weekly', this)">주간</button>
+                <button class="period-btn" onclick="changeReportPeriod('monthly', this)">월간</button>
+            </div>
+            <div class="report-grid">
+                <div class="card"><h3><span class="material-icons-round">show_chart</span> <span id="activity-report-title">주간</span> 활동량</h3><div class="chart-container"><canvas id="activity-chart"></canvas></div></div>
+                <div class="card"><h3><span class="material-icons-round">nights_stay</span> <span id="sleep-report-title">주간</span> 수면 패턴</h3><div class="chart-container"><canvas id="sleep-chart"></canvas></div></div>
+                <div class="card"><h3><span class="material-icons-round">sentiment_satisfied</span> <span id="emotion-report-title">주간</span> 감정 변화</h3><div class="chart-container"><canvas id="emotion-report-chart"></canvas></div></div>
+                <div class="card"><h3><span class="material-icons-round">psychology</span> <span id="cognitive-report-title">주간</span> 인지 활동</h3><div class="chart-container"><canvas id="cognitive-report-chart"></canvas></div></div>
+                <div class="card full-width"><h3><span class="material-icons-round">eco</span> <span id="env-report-title">주간</span> 환경 추이</h3><div class="chart-container"><canvas id="env-report-chart"></canvas></div></div>
+            </div>
+            <div class="card alert-history-card">
+                <div class="card-header"><h3><span class="material-icons-round">warning</span> 주의/위험 발생 이력</h3></div>
+                <div class="alert-history-list" id="alert-history-list"></div>
+            </div>
+        </div>
+
+        <!-- 마이페이지 뷰 (3컬럼 레이아웃) -->
+        <div id="mypage-view" class="view">
+            <div class="view-header"><h2>마이페이지</h2><p>내 정보와 설정을 관리합니다</p></div>
+            <div class="mypage-three-columns">
+                <div class="card mypage-card">
+                    <div class="card-header"><h3><span class="material-icons-round">person</span> 내 정보</h3><button class="link-btn" onclick="openEditModal('guardian')">수정</button></div>
+                    <div class="info-list">
+                        <div class="info-item"><span class="info-label">이름</span><span class="info-value" id="mypage-name">홍길동</span></div>
+                        <div class="info-item"><span class="info-label">아이디</span><span class="info-value" id="mypage-username">demo</span></div>
+                        <div class="info-item"><span class="info-label">연락처</span><span class="info-value masked" id="mypage-phone">010-****-5678</span></div>
+                        <div class="info-item"><span class="info-label">주소</span><span class="info-value masked" id="mypage-address">서울시 강남구 ****</span></div>
+                    </div>
+                    <div class="password-change-section">
+                        <div class="password-header" onclick="togglePasswordForm()">
+                            <span><span class="material-icons-round">lock</span> 비밀번호 변경</span>
+                            <span class="material-icons-round toggle-icon">expand_more</span>
+                        </div>
+                        <div class="password-form-wrapper" id="password-form-wrapper">
+                            <form id="password-change-form" class="compact-form">
+                                <div class="input-wrapper"><label>현재 비밀번호</label><input type="password" id="current-password" placeholder="현재 비밀번호"><span class="error-text"></span></div>
+                                <div class="input-wrapper"><label>새 비밀번호</label><input type="password" id="new-password" placeholder="새 비밀번호" data-rule="password"><span class="error-text"></span></div>
+                                <div class="input-wrapper"><label>새 비밀번호 확인</label><input type="password" id="new-password-confirm" placeholder="새 비밀번호 확인"><span class="error-text"></span></div>
+                                <button type="button" class="btn btn-primary btn-full" onclick="changePassword()">변경하기</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mypage-card">
+                    <div class="card-header"><h3><span class="material-icons-round">elderly</span> 어르신 정보</h3><button class="link-btn" onclick="openEditModal('senior')">수정</button></div>
+                    <div class="info-list">
+                        <div class="info-item"><span class="info-label">성함</span><span class="info-value" id="mypage-senior-name">김영순</span></div>
+                        <div class="info-item"><span class="info-label">생년월일</span><span class="info-value masked" id="mypage-senior-birth">1945년 **월 **일</span></div>
+                        <div class="info-item"><span class="info-label">성별</span><span class="info-value" id="mypage-senior-gender">여성</span></div>
+                        <div class="info-item"><span class="info-label">주거형태</span><span class="info-value" id="mypage-senior-living">독거</span></div>
+                        <div class="info-item"><span class="info-label">연락처</span><span class="info-value masked" id="mypage-senior-phone">010-****-5432</span></div>
+                        <div class="info-item"><span class="info-label">주소</span><span class="info-value masked" id="mypage-senior-address">서울시 서초구 ****</span></div>
+                    </div>
+                </div>
+                <div class="card mypage-card">
+                    <div class="card-header"><h3><span class="material-icons-round">devices</span> 등록된 기기</h3><button class="icon-btn" onclick="openAddDeviceModal()"><span class="material-icons-round">add</span></button></div>
+                    <div class="device-status-list" id="mypage-device-list"></div>
+                </div>
+            </div>
+            <div class="card notification-settings-card">
+                <div class="card-header"><h3><span class="material-icons-round">notifications</span> 알림 설정</h3></div>
+                <div class="setting-list horizontal">
+                    <div class="setting-item">
+                        <div class="setting-info"><span class="setting-label">이상 행동 감지 알림</span><span class="setting-desc">30분 이상 움직임이 없을 때</span></div>
+                        <label class="toggle-switch"><input type="checkbox" id="alert-abnormal" checked onchange="toggleNotification('abnormal')"><span class="toggle-slider"></span></label>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info"><span class="setting-label">응급상황 알림</span><span class="setting-desc">낙상 등 응급상황 감지 시</span></div>
+                        <label class="toggle-switch"><input type="checkbox" id="alert-emergency" checked onchange="toggleNotification('emergency')"><span class="toggle-slider"></span></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="healthcheck-view" class="view">
+    <div class="view-header">
+        <h2>헬스체크</h2>
+        <p>그라파나 대시보드로 상세 모니터링을 확인하세요</p>
+    </div>
+   <div class="card" style="max-width: 700px;">
+    <div class="card-header">
+        <h3><span class="material-icons-round">settings</span> 그라파나 URL 설정</h3>
+    </div>
+    <div class="input-wrapper" style="margin: 20px 0;">
+        <label>그라파나 대시보드 URL</label>
+        <input type="url" id="grafana-url" placeholder="https://your-grafana.com/dashboard">
+    </div>
+    <button class="btn btn-primary" onclick="saveGrafanaUrl()">
+        <span class="material-icons-round">save</span> URL 저장
+    </button>
+    <button class="btn btn-outline" onclick="openGrafana()" style="margin-left: 10px;">
+        <span class="material-icons-round">open_in_new</span> 그라파나 열기
+    </button>
+</div>
+
+<div class="card" style="max-width: 700px; margin-top: 20px;">
+    <div class="card-header">
+        <h3><span class="material-icons-round">notifications_active</span> 실시간 알림 연동 설정</h3>
+    </div>
+    <div class="input-wrapper" style="margin: 20px 0;">
+        <label>그라파나 알림 Webhook URL</label>
+        <input type="url" id="grafana-webhook-url" placeholder="https://your-grafana.com/api/alerting/webhook">
+    </div>
+    <div class="input-wrapper" style="margin: 20px 0;">
+        <label>알림 갱신 주기 (초)</label>
+        <select id="grafana-refresh-interval">
+            <option value="10">10초</option>
+            <option value="30" selected>30초</option>
+            <option value="60">1분</option>
+            <option value="300">5분</option>
+        </select>
+    </div>
+    <div class="setting-item" style="margin: 20px 0; background: var(--bg-soft); padding: 15px; border-radius: 8px;">
+        <div class="setting-info">
+            <span class="setting-label">센서 이상 감지 알림</span>
+            <span class="setting-desc">그라파나에서 센서 이상 감지 시 알림 수신</span>
+        </div>
+        <label class="switch">
+            <input type="checkbox" id="grafana-sensor-alert" checked>
+            <span class="slider"></span>
+        </label>
+    </div>
+    <div class="setting-item" style="margin: 20px 0; background: var(--bg-soft); padding: 15px; border-radius: 8px;">
+        <div class="setting-info">
+            <span class="setting-label">긴급 상황 알림</span>
+            <span class="setting-desc">낙상, 장시간 미활동 등 긴급 상황 알림</span>
+        </div>
+        <label class="switch">
+            <input type="checkbox" id="grafana-emergency-alert" checked>
+            <span class="slider"></span>
+        </label>
+    </div>
+    <button class="btn btn-primary" onclick="saveGrafanaAlertSettings()">
+        <span class="material-icons-round">save</span> 알림 설정 저장
+    </button>
+</div>
+    </div>
+</div>
+    </div>
+
+    <!-- 모달들 -->
+    <div id="notification-modal" class="modal">
+        <div class="modal-overlay" onclick="closeModal('notification-modal')"></div>
+        <div class="modal-content modal-lg">
+            <div class="modal-header"><h3><span class="material-icons-round">notifications</span> 전체 알림</h3><button class="modal-close" onclick="closeModal('notification-modal')"><span class="material-icons-round">close</span></button></div>
+            <div class="modal-body">
+                <div class="notification-filter">
+                    <button class="filter-btn active" onclick="filterNotifications('all', this)">전체</button>
+                    <button class="filter-btn" onclick="filterNotifications('unread', this)">안읽음</button>
+                    <button class="filter-btn" onclick="filterNotifications('danger', this)">긴급</button>
+                </div>
+                <div id="full-notification-list" class="full-notification-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="add-device-modal" class="modal">
+        <div class="modal-overlay" onclick="closeModal('add-device-modal')"></div>
+        <div class="modal-content">
+            <div class="modal-header"><h3><span class="material-icons-round">add_circle</span> 기기 추가</h3><button class="modal-close" onclick="closeModal('add-device-modal')"><span class="material-icons-round">close</span></button></div>
+            <div class="modal-body">
+                <form id="add-device-form">
+                    <div class="input-wrapper"><label>시리얼 번호 <span class="required">*</span></label><input type="text" id="modal-device-serial" placeholder="기기 시리얼 번호"><span class="error-text"></span></div>
+                    <div class="input-wrapper"><label>기기 이름</label><input type="text" id="modal-device-name" placeholder="예: 거실 환경센서"></div>
+                    <div class="input-wrapper"><label>설치 위치</label><select id="modal-device-location"><option value="living">거실</option><option value="bedroom">침실</option><option value="kitchen">주방</option><option value="bathroom">화장실</option><option value="entrance">현관</option></select></div>
+                </form>
+            </div>
+            <div class="modal-footer"><button type="button" class="btn btn-outline" onclick="closeModal('add-device-modal')">취소</button><button type="button" class="btn btn-primary" onclick="addDeviceFromModal()">추가하기</button></div>
+        </div>
+    </div>
+
+    <div id="edit-modal" class="modal">
+        <div class="modal-overlay" onclick="closeModal('edit-modal')"></div>
+        <div class="modal-content">
+            <div class="modal-header"><h3 id="edit-modal-title"><span class="material-icons-round">edit</span> 정보 수정</h3><button class="modal-close" onclick="closeModal('edit-modal')"><span class="material-icons-round">close</span></button></div>
+            <div class="modal-body" id="edit-modal-body"></div>
+            <div class="modal-footer"><button type="button" class="btn btn-outline" onclick="closeModal('edit-modal')">취소</button><button type="button" class="btn btn-primary" id="edit-modal-save">저장하기</button></div>
+        </div>
+    </div>
+
+    
+
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
