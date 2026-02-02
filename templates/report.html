@@ -1,0 +1,45 @@
+<!-- 리포트 뷰 -->
+        <div id="report-view" class="view">
+            <div class="view-header">
+                <h2>상세 리포트</h2>
+                <p>어르신의 건강 데이터를 한눈에 확인하세요</p>
+            </div>
+
+            <div class="card alert-history-card" style="margin-bottom: 20px;">
+                <div class="card-header">
+                    <h3><span class="material-icons-round">warning</span> 주의/위험 발생 이력</h3>
+                </div>
+                <div class="alert-history-list" id="alert-history-list"></div>
+            </div>
+
+            <div class="report-period-selector">
+                <button class="period-btn active" onclick="changeReportPeriod('weekly', this)">주간</button>
+                <button class="period-btn" onclick="changeReportPeriod('monthly', this)">월간</button>
+            </div>
+            <div class="report-grid">
+                <div class="card">
+                    <h3><span class="material-icons-round">show_chart</span> <span id="activity-report-title">주간</span>
+                        활동량</h3>
+                    <div class="chart-container"><canvas id="activity-chart"></canvas></div>
+                </div>
+                <div class="card">
+                    <h3><span class="material-icons-round">nights_stay</span> <span id="sleep-report-title">주간</span> 수면
+                        패턴</h3>
+                    <div class="chart-container"><canvas id="sleep-chart"></canvas></div>
+                </div>
+                <div class="card">
+                    <h3><span class="material-icons-round">sentiment_satisfied</span> <span
+                            id="emotion-report-title">주간</span> 감정 변화</h3>
+                    <div class="chart-container"><canvas id="emotion-report-chart"></canvas></div>
+                </div>
+                <div class="card">
+                    <h3><span class="material-icons-round">psychology</span> <span id="cognitive-report-title">주간</span>
+                        인지 활동</h3>
+                    <div class="chart-container"><canvas id="cognitive-report-chart"></canvas></div>
+                </div>
+                <div class="card full-width">
+                    <h3><span class="material-icons-round">eco</span> <span id="env-report-title">주간</span> 환경 추이</h3>
+                    <div class="chart-container"><canvas id="env-report-chart"></canvas></div>
+                </div>
+            </div>
+        </div>

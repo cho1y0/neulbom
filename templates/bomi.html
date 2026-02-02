@@ -1,0 +1,95 @@
+<div id="bomi-chat-view" class="view">
+            <div class="view-header">
+                <h2>보미와 대화</h2>
+                <p>음성으로 보미와 대화하고 실시간 분석 결과를 확인하세요</p>
+            </div>
+            <div class="bomi-chat-container">
+                <div class="chat-section">
+                    <div class="chat-empty-state" id="chat-empty-state">
+                        <div class="bomi-avatar" id="bomi-avatar">
+                            <img src="static/images/bomi-welcome.png" alt="보미">
+                        </div>
+                        <div class="bomi-greeting">
+                            <p class="greeting-text">안녕하세요! 저는 <strong>보미</strong>예요 🌸</p>
+                            <p class="greeting-sub">아래 마이크 버튼을 눌러 말씀해 주세요</p>
+                        </div>
+                        <div class="bomi-status" id="bomi-status">대기 중</div>
+                        <div class="voice-wave" id="voice-wave">
+                            <span></span><span></span><span></span><span></span><span></span>
+                        </div>
+                    </div>
+
+                    <div class="chat-messages" id="chat-messages"></div>
+
+                    <div class="realtime-text" id="realtime-text"></div>
+
+                    <div class="chat-controls">
+                        <button class="record-btn" id="record-btn" onclick="toggleRecording()">
+                            <span class="material-icons-round" id="record-icon">mic</span>
+                        </button>
+                        <span class="record-hint" id="record-hint">버튼을 눌러 말하기</span>
+                    </div>
+                </div>
+                <div class="analysis-section">
+                    <div class="analysis-card">
+                        <div class="card-header">
+                            <h3><span class="material-icons-round">analytics</span> 실시간 분석</h3>
+                        </div>
+                        <div class="analysis-content" id="analysis-content">
+                            <div class="analysis-item">
+                                <div class="analysis-icon"><span class="material-icons-round">mood</span></div>
+                                <div class="analysis-info">
+                                    <span class="analysis-label">감정 상태</span>
+                                    <span class="analysis-value" id="analysis-emotion">분석 대기</span>
+                                </div>
+                            </div>
+                            <div class="analysis-item">
+                                <div class="analysis-icon"><span class="material-icons-round">graphic_eq</span></div>
+                                <div class="analysis-info">
+                                    <span class="analysis-label">음성 톤</span>
+                                    <span class="analysis-value" id="analysis-tone">분석 대기</span>
+                                </div>
+                            </div>
+                            <div class="analysis-item">
+                                <div class="analysis-icon"><span class="material-icons-round">speed</span></div>
+                                <div class="analysis-info">
+                                    <span class="analysis-label">말하기 속도</span>
+                                    <span class="analysis-value" id="analysis-speed">분석 대기</span>
+                                </div>
+                            </div>
+                            <div class="analysis-item">
+                                <div class="analysis-icon"><span class="material-icons-round">record_voice_over</span>
+                                </div>
+                                <div class="analysis-info">
+                                    <span class="analysis-label">명확도</span>
+                                    <span class="analysis-value" id="analysis-clarity">분석 대기</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analysis-card">
+                        <div class="card-header">
+                            <h3><span class="material-icons-round">history</span> 대화 기록</h3>
+                        </div>
+                        <div class="conversation-stats" id="conversation-stats">
+                            <div class="stat-item">
+                                <span class="material-icons-round stat-icon">chat_bubble</span>
+                                <span class="stat-number" id="stat-total">0</span>
+                                <span class="stat-label">총 대화</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="material-icons-round stat-icon">schedule</span>
+                                <span class="stat-number" id="stat-duration">0분</span>
+                                <span class="stat-label">대화 시간</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="material-icons-round stat-icon">text_fields</span>
+                                <span class="stat-number" id="stat-words">0</span>
+                                <span class="stat-label">단어 수</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>

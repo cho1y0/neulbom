@@ -1,0 +1,33 @@
+<!-- ========== 로그인 페이지 ========== -->
+    <div id="login-page" class="page active">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-bomi">
+                    <img src="{{ url_for('static', filename='images/bomi-welcome.png') }}" alt="보미" class="bomi-img">
+                </div>
+                <div class="login-header">
+                    <h1 class="logo-text">늘봄</h1>
+                    <p class="logo-subtitle">언제나 곁에서 함께하는 따뜻한 돌봄</p>
+                </div>
+                <form id="login-form" class="login-form" onsubmit="return handleLogin(event)">
+                    <div class="input-group">
+                        <span class="input-icon material-icons-round">person</span>
+                        <input type="text" id="login-username" placeholder="아이디" required>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-icon material-icons-round">lock</span>
+                        <input type="password" id="login-password" placeholder="비밀번호" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">
+                        <span class="material-icons-round">favorite</span>
+                        로그인
+                    </button>
+                </form>
+                <div class="login-footer">
+                    <button type="button" class="btn-link" onclick="showPage('signup-page')">
+                        아직 회원이 아니신가요? <strong>회원가입</strong>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>

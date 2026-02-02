@@ -1,0 +1,61 @@
+<!-- 모달들 -->
+    <div id="notification-modal" class="modal">
+        <div class="modal-overlay" onclick="closeModal('notification-modal')"></div>
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3><span class="material-icons-round">notifications</span> 전체 알림</h3><button class="modal-close"
+                    onclick="closeModal('notification-modal')"><span class="material-icons-round">close</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="notification-filter">
+                    <button class="filter-btn active" onclick="filterNotifications('all', this)">전체</button>
+                    <button class="filter-btn" onclick="filterNotifications('unread', this)">안읽음</button>
+                    <button class="filter-btn" onclick="filterNotifications('danger', this)">긴급</button>
+                </div>
+                <div id="full-notification-list" class="full-notification-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="add-device-modal" class="modal">
+        <div class="modal-overlay" onclick="closeModal('add-device-modal')"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><span class="material-icons-round">add_circle</span> 기기 추가</h3><button class="modal-close"
+                    onclick="closeModal('add-device-modal')"><span class="material-icons-round">close</span></button>
+            </div>
+            <div class="modal-body">
+                <form id="add-device-form">
+                    <div class="input-wrapper"><label>시리얼 번호 <span class="required">*</span></label><input type="text"
+                            id="modal-device-serial" placeholder="기기 시리얼 번호"><span class="error-text"></span></div>
+                    <div class="input-wrapper"><label>기기 이름</label><input type="text" id="modal-device-name"
+                            placeholder="예: 거실 환경센서"></div>
+                    <div class="input-wrapper"><label>설치 위치</label><select id="modal-device-location">
+                            <option value="living">거실</option>
+                            <option value="bedroom">침실</option>
+                            <option value="kitchen">주방</option>
+                            <option value="bathroom">화장실</option>
+                            <option value="entrance">현관</option>
+                        </select></div>
+                </form>
+            </div>
+            <div class="modal-footer"><button type="button" class="btn btn-outline"
+                    onclick="closeModal('add-device-modal')">취소</button><button type="button" class="btn btn-primary"
+                    onclick="addDeviceFromModal()">추가하기</button></div>
+        </div>
+    </div>
+
+    <div id="edit-modal" class="modal">
+        <div class="modal-overlay" onclick="closeModal('edit-modal')"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="edit-modal-title"><span class="material-icons-round">edit</span> 정보 수정</h3><button
+                    class="modal-close" onclick="closeModal('edit-modal')"><span
+                        class="material-icons-round">close</span></button>
+            </div>
+            <div class="modal-body" id="edit-modal-body"></div>
+            <div class="modal-footer"><button type="button" class="btn btn-outline"
+                    onclick="closeModal('edit-modal')">취소</button><button type="button" class="btn btn-primary"
+                    id="edit-modal-save">저장하기</button></div>
+        </div>
+    </div>

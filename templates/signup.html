@@ -1,0 +1,405 @@
+<!-- ========== 회원가입 페이지 ========== -->
+    <div id="signup-page" class="page ">
+        <div class="signup-container">
+            <div class="progress-steps">
+                <div class="step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <span class="step-label">보호자 정보</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <span class="step-label">어르신 등록</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" data-step="3">
+                    <div class="step-circle">3</div>
+                    <span class="step-label">기기 등록</span>
+                </div>
+            </div>
+
+            <!-- Step 1: 보호자 정보 -->
+            <div id="signup-step-1" class="signup-step active">
+                <div class="step-header">
+                    <img src="{{ url_for('static', filename='images/bomi-plant.png') }}" alt="보미" class="step-bomi">
+                    <div>
+                        <h2>보호자 정보 입력</h2>
+                        <p>소중한 가족을 돌보는 보호자님의 정보를 입력해주세요</p>
+                    </div>
+                </div>
+                <form id="step1-form" class="signup-form">
+                    <div class="form-section">
+                        <h3><span class="material-icons-round">account_circle</span> 계정 정보</h3>
+                        <div class="input-wrapper">
+                            <label for="signup-username">아이디 <span class="required">*</span></label>
+                            <div class="input-with-btn">
+                                <input type="text" id="signup-username" placeholder="영문, 숫자 4-20자" data-rule="username">
+                                <button type="button" class="btn btn-sm btn-outline"
+                                    onclick="checkDuplicate()">중복확인</button>
+                            </div>
+                            <span class="error-text"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="signup-password">비밀번호 <span class="required">*</span></label>
+                            <input type="password" id="signup-password" placeholder="영문, 숫자, 특수문자 포함 8자 이상"
+                                data-rule="password">
+                            <span class="error-text"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="signup-password-confirm">비밀번호 확인 <span class="required">*</span></label>
+                            <input type="password" id="signup-password-confirm" placeholder="비밀번호를 다시 입력해주세요">
+                            <span class="error-text"></span>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h3><span class="material-icons-round">badge</span> 개인 정보</h3>
+                        <div class="input-wrapper">
+                            <label for="signup-name">이름 <span class="required">*</span></label>
+                            <input type="text" id="signup-name" placeholder="실명을 입력해주세요" data-rule="name">
+                            <span class="error-text"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="signup-phone">휴대폰 번호 <span class="required">*</span></label>
+                            <input type="tel" id="signup-phone" placeholder="010-0000-0000" data-rule="phone">
+                            <span class="error-text"></span>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h3><span class="material-icons-round">home</span> 주소</h3>
+                        <div class="input-wrapper">
+                            <label for="signup-zipcode">우편번호 <span class="required">*</span></label>
+                            <div class="input-with-btn">
+                                <input type="text" id="signup-zipcode" placeholder="우편번호" readonly>
+                                <button type="button" class="btn btn-sm btn-outline"
+                                    onclick="searchAddress('signup')">주소검색</button>
+                            </div>
+                            <span class="error-text"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="signup-address">기본주소 <span class="required">*</span></label>
+                            <input type="text" id="signup-address" placeholder="주소검색을 이용해주세요" readonly>
+                            <span class="error-text"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="signup-address-detail">상세주소 <span class="required">*</span></label>
+                            <input type="text" id="signup-address-detail" placeholder="상세주소를 입력해주세요">
+                            <span class="error-text"></span>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h3><span class="material-icons-round">gavel</span> 약관 동의</h3>
+                        <div class="terms-container">
+                            <label class="checkbox-label terms-all">
+                                <input type="checkbox" id="terms-all" onchange="toggleAllTerms(this)">
+                                <span class="checkmark"></span>
+                                <span>전체 동의</span>
+                            </label>
+                            <div class="terms-divider"></div>
+                            <div class="term-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" class="term-check required-term">
+                                    <span class="checkmark"></span>
+                                    <span>[필수] 서비스 이용약관 동의</span>
+                                </label>
+                                <button type="button" class="term-toggle" onclick="toggleTermContent('term-service')">
+                                    <span class="material-icons-round">expand_more</span>
+                                </button>
+                            </div>
+                            <div id="term-service" class="term-content">
+                                <p><strong>제1조 (목적)</strong><br>이 약관은 늘봄 AI 서비스 이용에 관한 기본적인 사항을 규정합니다.</p>
+                            </div>
+                            <div class="term-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" class="term-check required-term">
+                                    <span class="checkmark"></span>
+                                    <span>[필수] 개인정보 수집 및 이용 동의</span>
+                                </label>
+                                <button type="button" class="term-toggle" onclick="toggleTermContent('term-privacy')">
+                                    <span class="material-icons-round">expand_more</span>
+                                </button>
+                            </div>
+                            <div id="term-privacy" class="term-content">
+                                <p><strong>수집항목</strong><br>성명, 연락처, 주소, 로그인 정보</p>
+                            </div>
+                            <div class="term-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" class="term-check required-term">
+                                    <span class="checkmark"></span>
+                                    <span>[필수] 민감정보 처리 동의</span>
+                                </label>
+                                <button type="button" class="term-toggle" onclick="toggleTermContent('term-sensitive')">
+                                    <span class="material-icons-round">expand_more</span>
+                                </button>
+                            </div>
+                            <div id="term-sensitive" class="term-content">
+                                <p><strong>민감정보 항목</strong><br>건강상태, 활동 패턴, 수면 정보</p>
+                            </div>
+                            <div class="term-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" class="term-check">
+                                    <span class="checkmark"></span>
+                                    <span>[선택] 마케팅 정보 수신 동의</span>
+                                </label>
+                                <button type="button" class="term-toggle" onclick="toggleTermContent('term-marketing')">
+                                    <span class="material-icons-round">expand_more</span>
+                                </button>
+                            </div>
+                            <div id="term-marketing" class="term-content">
+                                <p>늘봄 AI의 이벤트, 혜택 정보를 받아보실 수 있습니다.</p>
+                            </div>
+                        </div>
+                        <span class="error-text" id="terms-error"></span>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" class="btn btn-outline" onclick="showPage('login-page')">취소</button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep(1)">다음 단계 <span
+                                class="material-icons-round">arrow_forward</span></button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 2: 어르신 정보 -->
+            <div id="signup-step-2" class="signup-step">
+                <div class="step-header">
+                    <img src="images/bomi-good.png" alt="보미" class="step-bomi">
+                    <div>
+                        <h2>어르신 정보 등록</h2>
+                        <p>돌봄 받으실 어르신의 정보를 입력해주세요</p>
+                    </div>
+                </div>
+                <form id="step2-form" class="signup-form">
+                    <div class="form-section">
+                        <h3><span class="material-icons-round">elderly</span> 기본 정보</h3>
+                        <div class="input-wrapper">
+                            <label for="senior-name">성함 <span class="required">*</span></label>
+                            <input type="text" id="senior-name" placeholder="어르신 성함" data-rule="name">
+                            <span class="error-text"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label>생년월일 <span class="required">*</span></label>
+                            <div class="birth-select-group">
+                                <select id="senior-birth-year" class="birth-select">
+                                    <option value="">년도</option>
+                                </select>
+                                <select id="senior-birth-month" class="birth-select">
+                                    <option value="">월</option>
+                                </select>
+                                <select id="senior-birth-day" class="birth-select">
+                                    <option value="">일</option>
+                                </select>
+                            </div>
+                            <span class="error-text" id="senior-birth-error"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label>성별 <span class="required">*</span></label>
+                            <div class="radio-group">
+                                <label class="radio-label"><input type="radio" name="senior-gender" value="male"><span
+                                        class="radio-mark"></span><span>남성</span></label>
+                                <label class="radio-label"><input type="radio" name="senior-gender" value="female"><span
+                                        class="radio-mark"></span><span>여성</span></label>
+                            </div>
+                            <span class="error-text" id="senior-gender-error"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label>연락처 유형 <span class="required">*</span></label>
+                            <select id="senior-phone-type" onchange="updatePhonePlaceholder()">
+                                <option value="mobile">휴대전화</option>
+                                <option value="landline">유선전화</option>
+                            </select>
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="senior-phone">연락처 <span class="required">*</span></label>
+                            <input type="tel" id="senior-phone" placeholder="010-0000-0000" data-rule="phone">
+                            <span class="error-text"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="senior-relation">가족관계 <span class="required">*</span></label>
+                            <select id="senior-relation">
+                                <option value="">선택해주세요</option>
+                                <option value="parent">부모님</option>
+                                <option value="grandparent">조부모님</option>
+                                <option value="spouse">배우자</option>
+                                <option value="relative">친척</option>
+                                <option value="other">기타</option>
+                            </select>
+                            <span class="error-text"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label>주거형태 <span class="required">*</span></label>
+                            <div class="radio-group vertical">
+                                <label class="radio-label"><input type="radio" name="senior-living" value="가족"><span
+                                        class="radio-mark"></span><span>자녀와 거주</span></label>
+                                <label class="radio-label"><input type="radio" name="senior-living" value="독거"><span
+                                        class="radio-mark"></span><span>독거</span></label>
+                                <label class="radio-label"><input type="radio" name="senior-living" value="부부"><span
+                                        class="radio-mark"></span><span>부부 거주</span></label>
+                            </div>
+                            <span class="error-text" id="senior-living-error"></span>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h3><span class="material-icons-round">location_on</span> 거주지 주소</h3>
+                        <div class="input-wrapper">
+                            <label for="senior-zipcode">우편번호 <span class="required">*</span></label>
+                            <div class="input-with-btn">
+                                <input type="text" id="senior-zipcode" placeholder="우편번호" readonly>
+                                <button type="button" class="btn btn-sm btn-outline"
+                                    onclick="searchAddress('senior')">주소검색</button>
+                            </div>
+                            <span class="error-text"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="senior-address">기본주소 <span class="required">*</span></label>
+                            <input type="text" id="senior-address" placeholder="주소검색을 이용해주세요" readonly>
+                            <span class="error-text"></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="senior-address-detail">상세주소 <span class="required">*</span></label>
+                            <input type="text" id="senior-address-detail" placeholder="상세주소를 입력해주세요">
+                            <span class="error-text"></span>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h3><span class="material-icons-round">medical_information</span> 특이사항</h3>
+                        <div class="input-wrapper">
+                            <label for="senior-notes">건강 관련 메모</label>
+                            <textarea id="senior-notes" rows="3" placeholder="복용 중인 약, 주의사항 등"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h3><span class="material-icons-round">verified_user</span> 어르신 정보 이용 동의</h3>
+                        <div class="terms-container">
+                            <label class="checkbox-label terms-all">
+                                <input type="checkbox" id="senior-terms-all" onchange="toggleAllSeniorTerms(this)">
+                                <span class="checkmark"></span>
+                                <span>전체 동의</span>
+                            </label>
+                            <div class="terms-divider"></div>
+                            <div class="term-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" class="senior-term-check required-term">
+                                    <span class="checkmark"></span>
+                                    <span>[필수] 어르신 개인정보 수집 동의</span>
+                                </label>
+                                <button type="button" class="term-toggle"
+                                    onclick="toggleTermContent('term-senior-privacy')">
+                                    <span class="material-icons-round">expand_more</span>
+                                </button>
+                            </div>
+                            <div id="term-senior-privacy" class="term-content">
+                                <p><strong>수집항목</strong><br>성명, 생년월일, 연락처, 주소</p>
+                            </div>
+                            <div class="term-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" class="senior-term-check required-term">
+                                    <span class="checkmark"></span>
+                                    <span>[필수] 건강 모니터링 동의</span>
+                                </label>
+                                <button type="button" class="term-toggle"
+                                    onclick="toggleTermContent('term-senior-monitoring')">
+                                    <span class="material-icons-round">expand_more</span>
+                                </button>
+                            </div>
+                            <div id="term-senior-monitoring" class="term-content">
+                                <p><strong>모니터링 항목</strong><br>활동량, 수면 패턴, 환경 정보</p>
+                            </div>
+                            <div class="term-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" class="senior-term-check required-term">
+                                    <span class="checkmark"></span>
+                                    <span>[필수] 법정대리인(보호자) 동의 확인</span>
+                                </label>
+                                <button type="button" class="term-toggle"
+                                    onclick="toggleTermContent('term-senior-guardian')">
+                                    <span class="material-icons-round">expand_more</span>
+                                </button>
+                            </div>
+                            <div id="term-senior-guardian" class="term-content">
+                                <p>본인은 어르신의 보호자로서 서비스 이용에 동의합니다.</p>
+                            </div>
+                        </div>
+                        <span class="error-text" id="senior-terms-error"></span>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" class="btn btn-outline" onclick="prevStep(2)"><span
+                                class="material-icons-round">arrow_back</span> 이전 단계</button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep(2)">다음 단계 <span
+                                class="material-icons-round">arrow_forward</span></button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 3: 기기 등록 -->
+            <div id="signup-step-3" class="signup-step">
+                <div class="step-header">
+                    <img src="images/bomi-happy.png" alt="보미" class="step-bomi">
+                    <div>
+                        <h2>IoT 기기 등록</h2>
+                        <p>어르신 댁에 설치할 기기를 등록해주세요</p>
+                    </div>
+                </div>
+                <form id="step3-form" class="signup-form">
+                    <div class="form-section">
+                        <h3><span class="material-icons-round">qr_code_scanner</span> 기기 등록 방식</h3>
+                        <div class="device-method-tabs">
+                            <button type="button" class="method-btn active" onclick="selectDeviceMethod('qr')">
+                                <span class="material-icons-round">qr_code_scanner</span> QR 스캔
+                            </button>
+                            <button type="button" class="method-btn" onclick="selectDeviceMethod('manual')">
+                                <span class="material-icons-round">keyboard</span> 직접 입력
+                            </button>
+                        </div>
+                        <div id="device-qr" class="device-input-section active">
+                            <div class="qr-scanner-placeholder">
+                                <span class="material-icons-round">qr_code_scanner</span>
+                                <p>카메라 권한을 허용하고<br>기기의 QR 코드를 스캔해주세요</p>
+                                <button type="button" class="btn btn-outline" onclick="simulateQRScan()">QR 스캔
+                                    시뮬레이션</button>
+                            </div>
+                        </div>
+                        <div id="device-manual" class="device-input-section">
+                            <div class="input-wrapper">
+                                <label for="device-serial">시리얼 번호 <span class="required">*</span></label>
+                                <input type="text" id="device-serial" placeholder="기기 시리얼 번호">
+                                <span class="error-text"></span>
+                            </div>
+                            <div class="input-wrapper">
+                                <label for="device-name">기기 이름</label>
+                                <input type="text" id="device-name" placeholder="예: 거실 환경센서">
+                            </div>
+                            <div class="input-wrapper">
+                                <label for="device-location">설치 위치</label>
+                                <select id="device-location">
+                                    <option value="living">거실</option>
+                                    <option value="bedroom">침실</option>
+                                    <option value="kitchen">주방</option>
+                                    <option value="bathroom">화장실</option>
+                                    <option value="entrance">현관</option>
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-outline btn-full" onclick="addDeviceToList()">
+                                <span class="material-icons-round">add</span> 기기 추가
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h3><span class="material-icons-round">devices</span> 등록된 기기</h3>
+                        <div id="device-list" class="device-list">
+                            <div class="empty-device-list">
+                                <span class="material-icons-round">devices_off</span>
+                                <p>등록된 기기가 없습니다</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" class="btn btn-outline" onclick="prevStep(3)"><span
+                                class="material-icons-round">arrow_back</span> 이전</button>
+                        <button type="button" class="btn btn-secondary" onclick="skipDeviceAndComplete()">나중에
+                            등록</button>
+                        <button type="button" class="btn btn-primary" onclick="completeSignup()"><span
+                                class="material-icons-round">check</span> 가입 완료</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>

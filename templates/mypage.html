@@ -1,0 +1,91 @@
+<!-- 마이페이지 뷰 (3컬럼 레이아웃) -->
+        <div id="mypage-view" class="view">
+            <div class="view-header">
+                <h2>마이페이지</h2>
+                <p>내 정보와 설정을 관리합니다</p>
+            </div>
+            <div class="mypage-three-columns">
+                <div class="card mypage-card">
+                    <div class="card-header">
+                        <h3><span class="material-icons-round">person</span> 내 정보</h3><button class="link-btn"
+                            onclick="openEditModal('guardian')">수정</button>
+                    </div>
+                    <div class="info-list">
+                        <div class="info-item"><span class="info-label">이름</span><span class="info-value"
+                                id="mypage-name">홍길동</span></div>
+                        <div class="info-item"><span class="info-label">아이디</span><span class="info-value"
+                                id="mypage-username">demo</span></div>
+                        <div class="info-item"><span class="info-label">연락처</span><span class="info-value masked"
+                                id="mypage-phone">010-****-5678</span></div>
+                        <div class="info-item"><span class="info-label">주소</span><span class="info-value masked"
+                                id="mypage-address">서울시 강남구 ****</span></div>
+                    </div>
+                    <div class="password-change-section">
+                        <div class="password-header" onclick="togglePasswordForm()">
+                            <span><span class="material-icons-round">lock</span> 비밀번호 변경</span>
+                            <span class="material-icons-round toggle-icon">expand_more</span>
+                        </div>
+                        <div class="password-form-wrapper" id="password-form-wrapper">
+                            <form id="password-change-form" class="compact-form">
+                                <div class="input-wrapper"><label>현재 비밀번호</label><input type="password"
+                                        id="current-password" placeholder="현재 비밀번호"><span class="error-text"></span>
+                                </div>
+                                <div class="input-wrapper"><label>새 비밀번호</label><input type="password" id="new-password"
+                                        placeholder="새 비밀번호" data-rule="password"><span class="error-text"></span></div>
+                                <div class="input-wrapper"><label>새 비밀번호 확인</label><input type="password"
+                                        id="new-password-confirm" placeholder="새 비밀번호 확인"><span
+                                        class="error-text"></span></div>
+                                <button type="button" class="btn btn-primary btn-full"
+                                    onclick="changePassword()">변경하기</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mypage-card">
+                    <div class="card-header">
+                        <h3><span class="material-icons-round">elderly</span> 어르신 정보</h3><button class="link-btn"
+                            onclick="openEditModal('senior')">수정</button>
+                    </div>
+                    <div class="info-list">
+                        <div class="info-item"><span class="info-label">성함</span><span class="info-value"
+                                id="mypage-senior-name">김영순</span></div>
+                        <div class="info-item"><span class="info-label">생년월일</span><span class="info-value masked"
+                                id="mypage-senior-birth">1945년 **월 **일</span></div>
+                        <div class="info-item"><span class="info-label">성별</span><span class="info-value"
+                                id="mypage-senior-gender">여성</span></div>
+                        <div class="info-item"><span class="info-label">주거형태</span><span class="info-value"
+                                id="mypage-senior-living">독거</span></div>
+                        <div class="info-item"><span class="info-label">연락처</span><span class="info-value masked"
+                                id="mypage-senior-phone">010-****-5432</span></div>
+                        <div class="info-item"><span class="info-label">주소</span><span class="info-value masked"
+                                id="mypage-senior-address">서울시 서초구 ****</span></div>
+                    </div>
+                </div>
+                <div class="card mypage-card">
+                    <div class="card-header">
+                        <h3><span class="material-icons-round">devices</span> 등록된 기기</h3><button class="icon-btn"
+                            onclick="openAddDeviceModal()"><span class="material-icons-round">add</span></button>
+                    </div>
+                    <div class="device-status-list" id="mypage-device-list"></div>
+                </div>
+            </div>
+            <div class="card notification-settings-card">
+                <div class="card-header">
+                    <h3><span class="material-icons-round">notifications</span> 알림 설정</h3>
+                </div>
+                <div class="setting-list horizontal">
+                    <div class="setting-item">
+                        <div class="setting-info"><span class="setting-label">미동 없음 감지 알림</span><span
+                                class="setting-desc">1시간 이상 움직임이 없을 시</span></div>
+                        <label class="toggle-switch"><input type="checkbox" id="alert-abnormal" checked
+                                onchange="toggleNotification('abnormal')"><span class="toggle-slider"></span></label>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info"><span class="setting-label">응급상황 알림</span><span
+                                class="setting-desc">낙상 등 응급상황 감지 시</span></div>
+                        <label class="toggle-switch"><input type="checkbox" id="alert-emergency" checked
+                                onchange="toggleNotification('emergency')"><span class="toggle-slider"></span></label>
+                    </div>
+                </div>
+            </div>
+        </div>

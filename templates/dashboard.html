@@ -1,0 +1,168 @@
+<!-- ========== 메인 앱 ========== -->
+<div id="main-app" class="page">
+    <nav class="main-nav">
+        <div class="nav-brand">
+            <img src="{{ url_for('static', filename='images/bomi-welcome.png') }}" alt="보미" class="nav-bomi">
+            <span class="nav-logo-text">늘봄</span>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item active" data-page="dashboard"><span
+                    class="material-icons-round">dashboard</span><span>대시보드</span></li>
+
+
+            <li class="nav-item" data-page="bomi-chat">
+                <span class="material-icons-round">mic</span>
+                <span>보미와 대화</span>
+            </li>
+
+
+            <li class="nav-item" data-page="report"><span class="material-icons-round">assessment</span><span>리포트</span>
+            </li>
+            <li class="nav-item" data-page="healthcheck"><span
+                    class="material-icons-round">monitor_heart</span><span>헬스체크</span></li>
+            <li class="nav-item" data-page="mypage"><span class="material-icons-round">person</span><span>마이페이지</span>
+            </li>
+        </ul>
+        <div class="nav-actions">
+            <button class="nav-bell" onclick="openNotificationModal()">
+                <span class="material-icons-round">notifications</span>
+                <span class="bell-badge" id="nav-bell-badge">2</span>
+            </button>
+            <button class="nav-logout" onclick="handleLogout()"><span
+                    class="material-icons-round">logout</span></button>
+        </div>
+    </nav>
+
+    <!-- 대시보드 (새 레이아웃: 상단 감정+인지, 하단 환경) -->
+    <div id="dashboard-view" class="view active">
+        <div class="dashboard-greeting">
+            <div class="greeting-content">
+                <img src="{{ url_for('static', filename='images/bomi-transparent.png') }}" alt="보미"
+                    class="greeting-bomi">
+                <div class="greeting-text">
+                    <h1>안녕하세요, <span id="user-name-display">보호자</span>님! 🌸</h1>
+                    <p id="dynamic-greeting"><span id="senior-name-display">어르신</span>의 오늘 하루도 늘봄이 함께합니다</p>
+                </div>
+            </div>
+            <div class="greeting-date" id="current-date"></div>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card emotion">
+                <div class="metric-icon"><span class="material-icons-round">sentiment_satisfied</span></div>
+                <div class="metric-info"><span class="metric-label">감정 상태</span><span class="metric-value">긍정적</span>
+                </div><span class="metric-badge good">좋음</span>
+            </div>
+
+            <div class="metric-card activity">
+                <div class="metric-icon"><span class="material-icons-round">directions_run</span></div>
+                <div class="metric-info">
+                    <span class="metric-label">오늘 활동량</span>
+                    <span class="metric-value" id="activity-value">0<small>회 감지</small></span>
+                </div>
+                <span class="metric-badge normal" id="activity-badge">측정중</span>
+            </div>
+
+            <div class="metric-card sleep">
+                <div class="metric-icon"><span class="material-icons-round">bedtime</span></div>
+                <div class="metric-info"><span class="metric-label">수면 시간</span><span
+                        class="metric-value">7.5<small>시간</small></span></div><span class="metric-badge good">양호</span>
+            </div>
+
+            <div class="metric-card health">
+                <div class="metric-icon"><span class="material-icons-round">home</span></div>
+                <div class="metric-info"><span class="metric-label">주거형태</span><span class="metric-value">독거</span>
+                </div><span class="metric-badge good">주택</span>
+            </div>
+        </div>
+
+        <div class="dashboard-main-grid">
+            <div class="dashboard-top-row">
+                <div class="card emotion-analysis-card">
+                    <div class="card-header">
+                        <h3><span class="material-icons-round">mood</span> 감정 분석</h3>
+                        <span class="card-badge positive">긍정적</span>
+                    </div>
+                    <div class="chart-container-md">
+                        <canvas id="emotion-bubble-chart"></canvas>
+                    </div>
+
+                    <div class="emotion-legend">
+                        <span class="legend-item"><span class="dot" style="background-color: #74cf37;"></span>긍정</span>
+                        <span class="legend-item"><span class="dot" style="background-color: #36a2eb;"></span>슬픔</span>
+                        <span class="legend-item"><span class="dot" style="background-color: #9966ff;"></span>불안</span>
+                        <span class="legend-item"><span class="dot" style="background-color: #ff5757;"></span>분노</span>
+                        <span class="legend-item"><span class="dot" style="background-color: #ff9f40;"></span>상처</span>
+                        <span class="legend-item"><span class="dot" style="background-color: #ffcd56;"></span>당황</span>
+                    </div>
+                </div>
+                <div class="card cognitive-card">
+                    <div class="card-header cognitive-header">
+                        <h3><span class="material-icons-round">psychology</span> 인지 활동</h3>
+                        <div class="cognitive-header-right">
+                            <div class="ai-ticker" aria-label="AI 추천 롤링 텍스트">
+                                <div class="ai-ticker-window">
+                                    <div class="ai-ticker-track">
+                                        <span class="ai-ticker-text">AI 추천: * 오후 산책 권장 * 수분 섭취 권장 *</span>
+                                        <span class="ai-ticker-text" aria-hidden="true">AI 추천: * 오후 산책 권장 * 수분 섭취 권장
+                                            *</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="card-badge good">활발</span>
+                        </div>
+                    </div>
+                    <div class="chart-container-md"><canvas id="cognitive-chart"></canvas></div>
+                    <div class="cognitive-summary">
+                        <div class="cog-item"><span class="material-icons-round">chat</span><span>대화 30분</span>
+                        </div>
+                        <div class="cog-item"><span class="material-icons-round">menu_book</span><span>독서 15분</span>
+                        </div>
+                        <div class="cog-item"><span class="material-icons-round">tv</span><span>TV 45분</span></div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="dashboard-bottom-row">
+                <div class="card environment-wide-card">
+                    <div class="card-header">
+                        <h3><span class="material-icons-round">thermostat</span> 실내 환경</h3>
+                        <div class="env-current-values">
+                            <span class="env-value temp">
+                                <span class="material-icons-round">device_thermostat</span>
+                                <span id="env-display-temp">24.5</span>°C
+                            </span>
+                            <span class="env-value humidity">
+                                <span class="material-icons-round">water_drop</span>
+                                <span id="env-display-humidity">45</span>%
+                            </span>
+                            <span class="env-value air">
+                                <span class="material-icons-round">air</span>
+                                <span id="env-display-air">좋음</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="chart-container-wide"><canvas id="env-chart"></canvas></div>
+                </div>
+            </div>
+            <div class="dashboard-side">
+                <div class="card notification-card compact">
+                    <div class="card-header">
+                        <h3><span class="material-icons-round">notifications_active</span> 최근 알림</h3><button
+                            class="link-btn" onclick="openNotificationModal()">전체</button>
+                    </div>
+                    <div class="notification-list compact" id="notification-list"></div>
+                </div>
+                <div class="card device-card compact">
+                    <div class="card-header">
+                        <h3><span class="material-icons-round">sensors</span> 기기 상태</h3><button class="icon-btn sm"
+                            onclick="openAddDeviceModal()"><span class="material-icons-round">add</span></button>
+                    </div>
+                    <div class="device-status-list compact" id="device-status-list"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
