@@ -152,6 +152,39 @@ class LLMHandler:
                 self._histories.pop(sid, None)
                 print(f"🧹 대화 기억 초기화됨 (session_id={sid})")
 
+   def get_last_qa_match(self, session_id: Optional[str] = None) -> Optional[Dict[str, str]]:
+        """세션별 마지막 (질문/답변) 쌍을 반환합니다. 없으면 None을 반환합니다."""
+        sid = (session_id or "default").strip() or "default"
+
+        # history는 락 아래에서 안전하게 복사
+        with self._lock:
+            history = list(self._histories.get(sid, []))
+
+        last_answer = None
+        last_question = None
+
+        # 뒤에서부터 assistant → user 순으로 찾기
+        for m in reversed(history):
+            role = (m.get("role") or "").strip()
+            content = (m.get("content") or "").strip()
+
+            if role == "assistant" and last_answer is None and content:
+                last_answer = content
+                continue
+
+            if role == "user" and last_answer is not None and content:
+                last_question = content
+                break
+
+        if not last_question or not last_answer:
+            return None
+
+        return {"question": last_question, "answer": last_answer, "session_id": sid}
+
+    # 구버전 코드 호환용 별칭(혹시 get_last_qa_matched를 호출하는 코드가 있을 때)
+    def get_last_qa_matched(self, session_id: Optional[str] = None) -> Optional[Dict[str, str]]:
+        return self.get_last_qa_match(session_id=session_id)
+
     def get_conversation_length(self, session_id: Optional[str] = None) -> int:
         """세션 대화 턴 수 반환"""
         sid = (session_id or "default").strip() or "default"
